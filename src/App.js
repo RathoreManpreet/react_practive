@@ -4,7 +4,7 @@ import PS from './container/PersonSecond'
 import { useState } from 'react';
 
 function App() {
-  const [state, setState] = useState({
+  const [p, setP] = useState({
     person: [
       {
         name: 'Manu',
@@ -22,18 +22,21 @@ function App() {
         name: 'Sukh',
         age: '20'
       }
-    ]
+    ],
+    isActive: 1,
   })
 
-  const handleChange = () => {
-    setState({
+  const handleChange = (event) => {
+
+    setP({
+      ...p,
       person: [
         {
           name: 'Manpreet',
           age: '27'
         },
         {
-          name: 'Salman',
+          name: event.target.value,
           age: '54'
         },
         {
@@ -48,16 +51,28 @@ function App() {
     });
   }
 
+  const toggle = () => {
+    setP({
+      ...p,
+      isActive: !p.isActive
+    })
+  }
+
   return (
     <div className="App-header">
       <h1 >Hello world</h1>
+      <button onClick={toggle} >Toggle</button>
       <div>
-        <Person name={state.person[0].name} age={state.person[0].age} />
+        {
+          p.isActive == 1 ? (<>
+            <Person change={(event) => handleChange(event)} name={p.person[0].name} age={p.person[0].age} />
+            <Person name={p.person[1].name} age={p.person[1].age} />
+            <Person name={p.person[2].name} age={p.person[2].age} />
+            <Person name={p.person[3].name} age={p.person[3].age} />
+          </>) : null
+        }
 
-        <Person name={state.person[1].name} age={state.person[1].age} />
-        <Person name={state.person[2].name} age={state.person[2].age} />
-        <Person name={state.person[3].name} age={state.person[3].age} />
-        <button onClick={handleChange}>Change</button>
+        {/* <button onClick={handleChange}>Change</button> */}
       </div>
 
       <div>
