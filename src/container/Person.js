@@ -6,11 +6,10 @@ const Person = (props) => {
         color: 'yellow'
     }
     return (<div className="person" style={style}>
-        <p>I'm a Person and my name is {props.name} and age {props.age}</p>
+        <p onClick={props.click}>I'm a Person and my name is {props.name} and age {props.age}</p>
         <div>
             {props.children}
         </div>
-        <button onClick={props.click}>Update</button>
         <input onChange={props.change} />
     </div>)
 }

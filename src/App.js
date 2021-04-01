@@ -7,48 +7,42 @@ function App() {
   const [p, setP] = useState({
     person: [
       {
+        id: 'A1',
         name: 'Manu',
         age: '27'
       },
       {
+        id: 'A2',
         name: 'Salman',
         age: '54'
       },
       {
+        id: 'A3',
         name: 'Amit',
         age: '70'
       },
       {
+        id: 'A4',
         name: 'Sukh',
         age: '20'
       }
     ],
-    isActive: 1,
+    isActive: true,
   })
 
-  const handleChange = (event) => {
-
-    setP({
-      ...p,
-      person: [
-        {
-          name: 'Manpreet',
-          age: '27'
-        },
-        {
-          name: event.target.value,
-          age: '54'
-        },
-        {
-          name: 'Amit',
-          age: '70'
-        },
-        {
-          name: 'Sukh',
-          age: '20'
-        }
-      ]
+  const handleChange = (event, id) => {
+    const personIndex = p.person.findIndex(p => {
+      return p.id === id;
     });
+
+    const person1 = { ...p.person[personIndex] };
+    person1.name = event.target.value;
+
+    const newPersons = [...p.person]
+    newPersons[personIndex] = person1
+
+    setP({ ...p, person: newPersons });
+
   }
 
   const toggle = () => {
@@ -58,18 +52,39 @@ function App() {
     })
   }
 
+  let person = null;
+
+  const deletePersonHandler = (personIndex) => {
+    let persons = [...p.person];
+    persons.splice(personIndex, 1)
+    setP({ ...p, person: persons });
+
+  }
+  const style = {
+    backgroundColor: 'blue'
+  }
+
+  const classes = [];
+
+  if (p.isActive === true) {
+    style.backgroundColor = 'green';
+    classes.push('yellow');
+    person = p.person.map((per, index) => {
+      return <Person change={(event) => handleChange(event, per.id)} key={per.id} name={per.name} age={per.age} click={() => deletePersonHandler(index)} />;
+    });
+  } else {
+    classes.push('red');
+
+  }
+
+  console.log(classes.join(' '));
   return (
-    <div className="App-header">
-      <h1 >Hello world</h1>
+    <div className="App-header" style={style}>
+      <h1 className={classes.join(' ')}>Hello world</h1>
       <button onClick={toggle} >Toggle</button>
       <div>
         {
-          p.isActive == 1 ? (<>
-            <Person change={(event) => handleChange(event)} name={p.person[0].name} age={p.person[0].age} />
-            <Person name={p.person[1].name} age={p.person[1].age} />
-            <Person name={p.person[2].name} age={p.person[2].age} />
-            <Person name={p.person[3].name} age={p.person[3].age} />
-          </>) : null
+          person
         }
 
         {/* <button onClick={handleChange}>Change</button> */}
