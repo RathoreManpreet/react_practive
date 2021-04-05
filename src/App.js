@@ -1,10 +1,19 @@
 import './App.css';
-import Person from './container/Person'
-import PS from './container/PersonSecond'
-import { useState } from 'react';
+import Person from './components/Person/Person'
+import PS from './components/Person/PersonSecond'
+import React, { Component } from 'react';
+import Counter from './container/Counter';
 
-function App() {
-  const [p, setP] = useState({
+class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log('App.js Constructor');
+  }
+  componentDidMount() {
+    console.log('App.js componentDidiMount');
+
+  }
+  state = {
     person: [
       {
         id: 'A1',
@@ -28,75 +37,73 @@ function App() {
       }
     ],
     isActive: true,
-  })
+  };
 
-  const handleChange = (event, id) => {
-    const personIndex = p.person.findIndex(p => {
+  static getDerivedStateFromProps(props, state) {
+    console.log('App.js getDerivedStateFromProps');
+    console.log('APP.js ', state, props)
+    return state;
+  }
+
+  handleChange = (event, id) => {
+    const personIndex = this.state.person.findIndex(p => {
       return p.id === id;
     });
 
-    const person1 = { ...p.person[personIndex] };
+    const person1 = { ...this.state.person[personIndex] };
     person1.name = event.target.value;
 
-    const newPersons = [...p.person]
+    const newPersons = [...this.state.person]
     newPersons[personIndex] = person1
 
-    setP({ ...p, person: newPersons });
+    this.setState({ ...this.state.person, person: newPersons });
 
   }
 
-  const toggle = () => {
-    setP({
-      ...p,
-      isActive: !p.isActive
+  toggle = () => {
+    this.setState({
+      ...this.state.person,
+      isActive: !this.state.person.isActive
     })
   }
 
-  let person = null;
 
-  const deletePersonHandler = (personIndex) => {
-    let persons = [...p.person];
+
+  deletePersonHandler = (personIndex) => {
+    let persons = [...this.state.person];
     persons.splice(personIndex, 1)
-    setP({ ...p, person: persons });
+    this.setState({ ...this.state.person, person: persons });
 
   }
-  const style = {
-    backgroundColor: 'blue'
-  }
 
-  const classes = [];
+  render() {
+    console.log('App.js render');
 
-  if (p.isActive === true) {
-    style.backgroundColor = 'green';
-    classes.push('yellow');
-    person = p.person.map((per, index) => {
-      return <Person change={(event) => handleChange(event, per.id)} key={per.id} name={per.name} age={per.age} click={() => deletePersonHandler(index)} />;
+    let person = null;
+    person = this.state.person.map((per, index) => {
+      return <Person change={(event) => this.handleChange(event, per.id)} key={per.id} name={per.name} age={per.age} click={() => this.deletePersonHandler(index)} />;
     });
-  } else {
-    classes.push('red');
+    return (
+      <div className="App-header" >
+        <h1 >Hello world</h1>
+        <button onClick={this.toggle} >Toggle</button>
+        <div>
+          {
+            person
+          }
+        </div>
 
+        <div>
+          Class Based
+        </div>
+        <PS name="Param" age="20" />
+        <Counter />
+      </div>
+
+    );
   }
 
-  console.log(classes.join(' '));
-  return (
-    <div className="App-header" style={style}>
-      <h1 className={classes.join(' ')}>Hello world</h1>
-      <button onClick={toggle} >Toggle</button>
-      <div>
-        {
-          person
-        }
 
-        {/* <button onClick={handleChange}>Change</button> */}
-      </div>
-
-      <div>
-        Class Based
-      </div>
-      <PS name="Param" age="20" />
-    </div>
-
-  );
 }
 
 export default App;
