@@ -1,30 +1,19 @@
-import React, { Component } from 'react'
-
-class PersonSecond extends Component {
-
-    constructor() {
-        super();
-        this.state = {
-            isActive: 'Yes'
+import '../../container/Person.css';
+import { useEffect } from 'react';
+const PersonSecond = (props) => {
+    useEffect(() => {
+        console.log('useEffect of Person Second ', props.name);
+        return () => {
+            console.log('will Unmount');
         }
-    }
-
-    handleChange = () => {
-        this.setState({
-            isActive: 'No'
-        });
-    }
-    render() {
-        return (
-            <div>
-                Hello {this.props.name}
-
-                <p>You are active: {this.state.isActive}</p>
-
-                <button onClick={this.handleChange}>Change</button>
-            </div>
-        )
-    }
+    }, [props.name])
+    return (<div className="person" >
+        <p onClick={props.click}>I'm a Person and my name is {props.name} and age {props.age}</p>
+        <div>
+            {props.children}
+        </div>
+        <input onChange={props.change} />
+    </div>);
 }
 
-export default PersonSecond;
+export default PersonSecond

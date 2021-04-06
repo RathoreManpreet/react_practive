@@ -11,6 +11,7 @@ const Counter = () => {
         div.push(<div className="person">Hello</div>);
 
     }
+    console.log(div);
     return (
         <div>
             <div >

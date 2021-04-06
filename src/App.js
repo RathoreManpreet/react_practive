@@ -1,18 +1,16 @@
 import './App.css';
 import Person from './components/Person/Person'
 import PS from './components/Person/PersonSecond'
-import React, { Component } from 'react';
-import Counter from './container/Counter';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    console.log('App.js Constructor');
-  }
-  componentDidMount() {
-    console.log('App.js componentDidiMount');
-
-  }
+import React, { PureComponent } from 'react';
+// import Counter from './container/Counter';
+import Counter2 from './container/Counter2'
+import Counter3 from './container/Counter3';
+class App extends PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   console.log('App.js Constructor');
+  // }
   state = {
     person: [
       {
@@ -39,11 +37,31 @@ class App extends Component {
     isActive: true,
   };
 
-  static getDerivedStateFromProps(props, state) {
-    console.log('App.js getDerivedStateFromProps');
-    console.log('APP.js ', state, props)
-    return state;
-  }
+  // componentDidMount() {
+  //   console.log('App.js componentDidiMount');
+
+  // }
+
+  // getSnapshotBeforeUpdate(prevProps, prevState) {
+  //   console.log('App.js getSnapshotBeforeUpdate');
+  //   console.log('props ', prevProps);
+
+  //   return null;
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   // Typical usage (don't forget to compare props):
+  //   console.log('App.js componentDidUpdate');
+
+  // }
+
+
+
+  // static getDerivedStateFromProps(props, state) {
+  //   console.log('App.js getDerivedStateFromProps');
+  //   console.log('APP.js ', state, props)
+  //   return state;
+  // }
 
   handleChange = (event, id) => {
     const personIndex = this.state.person.findIndex(p => {
@@ -62,8 +80,8 @@ class App extends Component {
 
   toggle = () => {
     this.setState({
-      ...this.state.person,
-      isActive: !this.state.person.isActive
+      ...this.state,
+      isActive: !this.state.isActive
     })
   }
 
@@ -77,15 +95,17 @@ class App extends Component {
   }
 
   render() {
-    console.log('App.js render');
-
+    // console.log('App.js render');
     let person = null;
-    person = this.state.person.map((per, index) => {
-      return <Person change={(event) => this.handleChange(event, per.id)} key={per.id} name={per.name} age={per.age} click={() => this.deletePersonHandler(index)} />;
-    });
+    if (this.state.isActive) {
+      person = this.state.person.map((per, index) => {
+        return <Person change={(event) => this.handleChange(event, per.id)} key={per.id} name={per.name} age={per.age} click={() => this.deletePersonHandler(index)} />;
+      });
+    }
+
     return (
       <div className="App-header" >
-        <h1 >Hello world</h1>
+        {/* <h1 >Hello world</h1>
         <button onClick={this.toggle} >Toggle</button>
         <div>
           {
@@ -94,10 +114,12 @@ class App extends Component {
         </div>
 
         <div>
-          Class Based
+          Functional Based
         </div>
-        <PS name="Param" age="20" />
-        <Counter />
+        { this.state.isActive ? <PS name={this.state.person[0].name} age={this.state.person[0].age} change={(event) => this.handleChange(event, this.state.person[0].id)} /> : null} */}
+        {/* <Counter /> */}
+        {/* <Counter2 /> */}
+        <Counter3 />
       </div>
 
     );
